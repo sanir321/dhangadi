@@ -193,13 +193,15 @@ export const games = [
     icon: unipinIcon,
     description: 'UniPin vouchers for wide variety of online games and services.',
     themeColor: '#3a86ff',
+    supportsQuantity: true,
+    pricing: {
+      basePrice: 2190,
+      tieredPrice: 2140,
+      tierThreshold: 5,
+      costPerUnit: 1712 // 80% of tiered price as a guestimate or similar to before
+    },
     packages: [
-      { id: 'uni-100', label: '100 NPR Voucher', price: 110, cost: 88 },
-      { id: 'uni-250', label: '250 NPR Voucher', price: 270, cost: 216 },
-      { id: 'uni-500', label: '500 NPR Voucher', price: 530, cost: 424 },
-      { id: 'uni-1000', label: '1000 NPR Voucher', price: 1050, cost: 840 },
-      { id: 'uni-2500', label: '2500 NPR Voucher', price: 2600, cost: 2080 },
-      { id: 'uni-5000', label: '5000 NPR Voucher', price: 5200, cost: 4160 },
+      { id: 'uni-base', label: '1 UniPin Voucher', price: 2190, cost: 1752 },
     ]
   }
 ];
@@ -210,6 +212,13 @@ export const bankDetails = {
   bankName: 'Citizens Bank',
   accountHolder: 'Dhangadi Top Up Store',
   qrImage: qrImage
+};
+
+export const contactDetails = {
+  whatsapp: '+91 93156 96727',
+  whatsappLink: 'https://wa.me/919315696727',
+  facebookLink: 'https://www.facebook.com/profile.php?id=61557869606001',
+  email: 'support@dhangaditopup.com.np'
 };
 
 // Announcement or Nano Banner data

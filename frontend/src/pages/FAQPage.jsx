@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronDown, Shield, Clock, CreditCard, HelpCircle, MessageCircle, ArrowRight } from 'lucide-react';
 import Navbar from '../components/Navbar';
+import { contactDetails } from '../data/games';
 
 const FAQItem = ({ question, answer }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -9,18 +10,18 @@ const FAQItem = ({ question, answer }) => {
         <div className="glass-morphism overflow-hidden">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full flex items-center justify-between p-6 text-left hover:bg-white/5 transition-all duration-300"
+                className="w-full flex items-center justify-between p-4 md:p-6 text-left hover:bg-white/5 transition-all duration-300"
             >
-                <span className="font-bold text-lg pr-8">{question}</span>
+                <span className="font-bold text-base md:text-lg pr-4 md:pr-8">{question}</span>
                 <div className={`p-2 rounded-xl bg-white/5 transition-transform duration-500 ${isOpen ? 'rotate-180 bg-accent text-black' : ''}`}>
-                    <ChevronDown size={20} />
+                    <ChevronDown size={window.innerWidth < 768 ? 16 : 20} />
                 </div>
             </button>
             <div 
                 className={`grid transition-all duration-500 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
             >
                 <div className="overflow-hidden">
-                    <div className="px-6 pb-8 text-white/50 leading-relaxed font-medium">
+                    <div className="px-4 md:px-6 pb-6 md:pb-8 text-white/50 leading-relaxed font-medium text-sm md:text-base">
                         {answer.split('\n').map((line, i) => (
                             <p key={i} className="mb-2">{line}</p>
                         ))}
@@ -93,32 +94,32 @@ const FAQPage = () => {
     return (
         <div className="min-h-screen bg-background text-foreground">
             <Navbar />
-            <div className="max-w-7xl mx-auto pt-28 pb-20 px-4">
+            <div className="max-w-7xl mx-auto pt-32 pb-20 px-4">
                 {/* Header */}
                 <div className="text-center mb-16 max-w-2xl mx-auto">
-                    <h1 className="text-5xl md:text-6xl font-black mb-6 tracking-tight">Support <span className="text-accent">&</span> Logic</h1>
-                    <p className="text-white/50 text-xl font-medium leading-relaxed">Everything you need to know about our premium gaming services in Digital Nepal.</p>
+                    <h1 className="text-4xl md:text-6xl font-black mb-6 tracking-tight">Support <span className="text-accent">&</span> Logic</h1>
+                    <p className="text-white/50 text-lg md:text-xl font-medium leading-relaxed">Everything you need to know about our premium gaming services in Digital Nepal.</p>
                 </div>
 
                 {/* Policies Grid */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-20">
                     {policies.map((policy, index) => (
-                        <div key={index} className="glass-card flex flex-col items-center text-center p-8 group hover:-translate-y-2 transition-all duration-500">
-                            <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mb-6 group-hover:bg-accent group-hover:text-black transition-all duration-500 border border-white/5">
+                        <div key={index} className="glass-card flex flex-col items-center text-center p-6 md:p-8 group hover:-translate-y-2 transition-all duration-500">
+                            <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-white/5 flex items-center justify-center mb-4 md:mb-6 group-hover:bg-accent group-hover:text-black transition-all duration-500 border border-white/5">
                                 {policy.icon}
                             </div>
-                            <h3 className="font-black text-lg mb-2 uppercase tracking-tight">{policy.title}</h3>
-                            <p className="text-sm text-white/30 font-medium">{policy.description}</p>
+                            <h3 className="font-black text-base md:text-lg mb-2 uppercase tracking-tight">{policy.title}</h3>
+                            <p className="text-xs md:text-sm text-white/30 font-medium">{policy.description}</p>
                         </div>
                     ))}
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                     {/* FAQs Column */}
-                    <div className="lg:col-span-2 space-y-6">
+                    <div className="lg:col-span-2 space-y-4 md:space-y-6">
                         <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-3xl font-bold tracking-tight">Common Questions</h2>
-                            <div className="h-[2px] flex-1 mx-8 bg-white/5 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                            <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Common Questions</h2>
+                            <div className="h-[2px] flex-1 mx-4 md:mx-8 bg-white/5 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
                         </div>
                         {faqs.map((faq, index) => (
                             <FAQItem key={index} question={faq.question} answer={faq.answer} />
@@ -128,14 +129,16 @@ const FAQPage = () => {
                     {/* Side Info Column */}
                     <div className="lg:col-span-1 space-y-8">
                         {/* WhatsApp CTA */}
-                        <div className="glass-card bg-accent/5 border-accent/20 relative overflow-hidden group">
+                        <div className="glass-card bg-accent/5 border-accent/20 relative overflow-hidden group p-6 md:p-8">
                             <div className="absolute -right-12 -top-12 w-40 h-40 bg-accent/20 blur-3xl opacity-50 group-hover:opacity-100 transition-opacity" />
                             <MessageCircle className="text-accent mb-6" size={48} />
-                            <h3 className="text-2xl font-black mb-2 uppercase tracking-tight">Need immediate help?</h3>
-                            <p className="text-white/50 mb-8 font-medium">Our agents are active on WhatsApp and ready to assist you with your orders manually.</p>
+                            <h3 className="text-xl md:text-2xl font-black mb-2 uppercase tracking-tight">Need immediate help?</h3>
+                            <p className="text-sm md:text-base text-white/50 mb-8 font-medium">Our agents are active on WhatsApp and ready to assist you with your orders manually.</p>
                             <a
-                                href="#"
-                                className="w-full bg-accent text-black font-black py-4 rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all"
+                                href={contactDetails.whatsappLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="w-full bg-accent text-black font-black py-4 rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all text-sm md:text-base"
                             >
                                 Chat on WhatsApp <ArrowRight size={20} />
                             </a>

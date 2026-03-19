@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useMemo } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useDependencies } from '../DependencyContext';
 import { useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
@@ -22,8 +22,13 @@ const formSchema = z.object({
 const CheckoutPage = () => {
   const { gameId, pkgId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { getGames, placeOrder } = useDependencies();
   const [loading, setLoading] = useState(false);
+
+  // Parse quantity from URL
+  const searchParams = new URLSearchParams(location.search);
+  const quantity = parseInt(searchParams.get('q')) || 1;
 
   const { data: game } = useQuery({
     queryKey: ['game', gameId],
@@ -31,6 +36,31 @@ const CheckoutPage = () => {
   });
 
   const targetPkg = game?.packages.find(p => p.id === pkgId);
+
+  // Calculate tired pricing
+  const pricingData = useMemo(() => {
+    if (!game || !targetPkg) return null;
+    
+    if (game.supportsQuantity && game.pricing) {
+        const isTiered = quantity >= (game.pricing.tierThreshold || 5);
+        const unitPrice = isTiered ? game.pricing.tieredPrice : game.pricing.basePrice;
+        const unitCost = isTiered ? game.pricing.costPerUnit : targetPkg.cost;
+        
+        return {
+            totalPrice: unitPrice * quantity,
+            totalCost: unitCost * quantity,
+            unitPrice,
+            isTiered
+        };
+    }
+    
+    return {
+        totalPrice: targetPkg.price,
+        totalCost: targetPkg.cost,
+        unitPrice: targetPkg.price,
+        isTiered: false
+    };
+  }, [game, targetPkg, quantity]);
 
   const { register, handleSubmit, formState: { errors }, watch } = useForm({
     resolver: zodResolver(formSchema)
@@ -66,9 +96,10 @@ const CheckoutPage = () => {
         gameId: game.id,
         gameName: game.name,
         packageId: targetPkg.id,
-        packageLabel: targetPkg.label,
-        price: targetPkg.price,
-        cost: targetPkg.cost,
+        packageLabel: game.supportsQuantity ? `${quantity}x ${game.name} Voucher` : targetPkg.label,
+        price: pricingData.totalPrice,
+        cost: pricingData.totalCost,
+        quantity: game.supportsQuantity ? quantity : 1, // Add quantity field if your backend supports it or just use label
         playerId: values.playerId,
         serverId: values.serverId || null,
         remark: values.remark || '',
@@ -98,7 +129,7 @@ const CheckoutPage = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Navbar />
-      <div className="max-w-7xl mx-auto px-4 pt-24 pb-20">
+      <div className="max-w-7xl mx-auto px-4 pt-32 pb-20">
         <button 
           onClick={() => navigate(-1)} 
           className="flex items-center gap-2 text-white/50 hover:text-white mb-8 group transition-colors"
@@ -110,11 +141,11 @@ const CheckoutPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Main Form */}
           <div className="lg:col-span-2 space-y-8">
-            <h1 className="text-4xl font-bold tracking-tight">Checkout</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Checkout</h1>
             
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
               {/* Account Details */}
-              <div className="glass-card">
+              <div className="glass-card !p-6 sm:!p-10">
                 <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
                   <Package className="text-accent" size={20} />
                   Game Account Details
@@ -157,15 +188,15 @@ const CheckoutPage = () => {
               </div>
 
               {/* Payment Section */}
-              <div className="glass-card">
+              <div className="glass-card !p-6 sm:!p-10">
                 <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
                   <QrCode className="text-accent" size={20} />
                   Payment Information
                 </h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                  <div className="bg-white p-6 rounded-[2.5rem] w-fit mx-auto shadow-2xl shadow-accent/20 border-4 border-accent/20">
-                    <img src={bankDetails.qrImage} alt="Payment QR" className="w-56 h-56 object-contain" />
+                  <div className="bg-white p-4 sm:p-6 rounded-[2.5rem] w-fit mx-auto shadow-2xl shadow-accent/20 border-4 border-accent/20">
+                    <img src={bankDetails.qrImage} alt="Payment QR" className="w-48 h-48 sm:w-56 sm:h-56 object-contain" />
                   </div>
                   <div className="space-y-4">
                     <div className="p-4 rounded-2xl bg-white/5 border border-white/5">
@@ -181,7 +212,7 @@ const CheckoutPage = () => {
 
                 <div className="mt-12">
                   <label className="text-sm font-bold text-white/40 uppercase tracking-widest mb-4 block">Upload Payment Screenshot *</label>
-                  <label className={`relative group cursor-pointer flex flex-col items-center justify-center p-10 border-2 border-dashed rounded-3xl transition-all duration-300 ${
+                  <label className={`relative group cursor-pointer flex flex-col items-center justify-center p-6 sm:p-10 border-2 border-dashed rounded-3xl transition-all duration-300 ${
                     screenshotFile?.length ? 'border-accent bg-accent/5' : 'border-white/10 hover:border-accent/30 hover:bg-white/5'
                   }`}>
                     <input 
@@ -226,11 +257,13 @@ const CheckoutPage = () => {
                 <div className="space-y-3 py-6 border-y border-white/5">
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-white/40">Item</span>
-                    <span className="font-bold">{targetPkg.label}</span>
+                    <span className="font-bold">
+                      {game.supportsQuantity ? `${quantity}x ${game.name} Voucher` : targetPkg.label}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-white/40">Subtotal</span>
-                    <span className="font-bold">NPR {targetPkg.price}</span>
+                    <span className="font-bold">NPR {pricingData.totalPrice}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-white/40">Fee</span>
@@ -241,7 +274,7 @@ const CheckoutPage = () => {
                 <div className="pt-2">
                   <div className="flex justify-between items-end">
                     <span className="text-white/40 text-sm font-bold uppercase tracking-widest">Grand Total</span>
-                    <span className="text-3xl font-black text-accent">NPR {targetPkg.price}</span>
+                    <span className="text-3xl font-black text-accent">NPR {pricingData.totalPrice}</span>
                   </div>
                 </div>
 

@@ -29,7 +29,7 @@ const Navbar = () => {
                         <div className="w-10 h-10 bg-accent/10 rounded-xl flex items-center justify-center border border-accent/20 group-hover:bg-accent/20 transition-all">
                             <img src={logo} alt="DN Official" className="h-7 w-7 object-contain" />
                         </div>
-                        <span className="text-xl font-black tracking-tighter uppercase hidden sm:block">Dhangadi Top Up Store</span>
+                        <span className="text-lg sm:text-xl font-black tracking-tighter uppercase block">Dhangadi <span className="text-white/20 sm:text-inherit">Store</span></span>
                     </Link>
 
                     {/* Desktop Navigation */}
@@ -104,7 +104,13 @@ const Navbar = () => {
                             </Link>
 
                             <div className="px-4 py-4">
-                                <p className="text-[10px] text-white/20 uppercase tracking-[0.2em] font-black mb-4">Popular Games</p>
+                                <a 
+                                    href="#games" 
+                                    className="text-[10px] text-accent hover:text-white uppercase tracking-[0.2em] font-black mb-4 block transition-colors"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    Popular Games ↓
+                                </a>
                                 <div className="grid grid-cols-2 gap-3">
                                     {games.map(game => (
                                         <Link

@@ -17,7 +17,7 @@ const Marquee = ({ images }) => {
           >
             <img
               src={img}
-              className="object-cover w-full h-full transition-transform duration-[3s] group-hover:scale-110 opacity-60 group-hover:opacity-100 transition-opacity"
+              className="object-cover w-full h-full transition-transform duration-[3s] group-hover:scale-110 opacity-80 sm:opacity-60 group-hover:opacity-100 transition-opacity"
               alt={`Game Impression ${i + 1}`}
               onError={(e) => {
                 e.target.parentElement.style.display = 'none';

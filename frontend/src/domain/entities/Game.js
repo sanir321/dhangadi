@@ -1,5 +1,5 @@
 export class Game {
-  constructor({ id, name, currency, idField, icon, description, packages, serverRequired = false }) {
+  constructor({ id, name, currency, idField, icon, description, packages, serverRequired = false, themeColor, supportsQuantity = false, pricing = null }) {
     this.id = id;
     this.name = name;
     this.currency = currency;
@@ -8,6 +8,9 @@ export class Game {
     this.description = description;
     this.packages = packages.map(pkg => new Package(pkg));
     this.serverRequired = serverRequired;
+    this.themeColor = themeColor;
+    this.supportsQuantity = supportsQuantity;
+    this.pricing = pricing;
   }
 }
 
