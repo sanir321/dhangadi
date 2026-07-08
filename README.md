@@ -29,8 +29,8 @@ npm run dev
 - **Storage**: The `screenshots` bucket is configured (public read).
 - **Edge Functions**:
   - Set secrets via Supabase Dashboard or CLI:
-    - `TELEGRAM_BOT_TOKEN`: `8608420199:AAHpXh9hxK6jeS3RXhy0n8LmY_EnnlVDWPQ`
-    - `TELEGRAM_CHAT_ID`: `8466967948`
+    - `TELEGRAM_BOT_TOKEN`: Set this via Supabase secrets (do not commit to repo)
+    - `TELEGRAM_CHAT_ID`: Set this via Supabase secrets (do not commit to repo)
 
 ## Project Structure
 - `frontend/src/pages`: Home, Selection, Checkout, Admin, Success.
