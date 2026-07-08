@@ -24,3 +24,13 @@ dist-ssr
 *.sw?
 .env
 .env.local
+
+# Test files
+*.png
+*.jpg
+*.jpeg
+test_*.png
+
+# OS
+Thumbs.db
+.DS_Store
