@@ -1,0 +1,19 @@
+name: Keep Supabase Active
+
+on:
+  schedule:
+    # Runs every day at 00:00 UTC to prevent Supabase inactivity auto-pause
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase Database Endpoint
+        run: |
+          echo "Sending keep-alive ping to Supabase..."
+          curl -s -f -X GET \
+            -H "apikey: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5lbWJ4eXVodW54ZndvYW9nZnF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2MjM4MzcsImV4cCI6MjA4OTE5OTgzN30.uyZ7NEiOXMIqFLJu_jxkb-zHR3UDVD6ETWSW6T_4ZBA' }}" \
+            "https://nembxyuhunxfwoaogfqy.supabase.co/rest/v1/site_settings?select=id&limit=1" > /dev/null
+          echo "Supabase keep-alive ping successful!"
