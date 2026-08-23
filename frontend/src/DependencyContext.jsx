@@ -1,23 +1,32 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useMemo } from 'react';
 import { SupabaseOrderRepository } from './infrastructure/repositories/SupabaseOrderRepository';
-import { LocalGameRepository } from './infrastructure/repositories/LocalGameRepository';
+import { SupabaseGameRepository } from './infrastructure/repositories/SupabaseGameRepository';
+import { SupabaseSettingsRepository } from './infrastructure/repositories/SupabaseSettingsRepository';
 import { GetGames } from './application/use-cases/GetGames';
+import { ManageGames } from './application/use-cases/ManageGames';
 import { PlaceOrder } from './application/use-cases/PlaceOrder';
 import { TrackOrder } from './application/use-cases/TrackOrder';
 
 const DependencyContext = createContext(null);
 
 export const DependencyProvider = ({ children }) => {
-  // Repositories
-  const gameRepository = new LocalGameRepository();
-  const orderRepository = new SupabaseOrderRepository();
+  const dependencies = useMemo(() => {
+    // Repositories
+    const gameRepository = new SupabaseGameRepository();
+    const orderRepository = new SupabaseOrderRepository();
+    const settingsRepository = new SupabaseSettingsRepository();
 
-  // Use Cases
-  const dependencies = {
-    getGames: new GetGames(gameRepository),
-    placeOrder: new PlaceOrder(orderRepository),
-    trackOrder: new TrackOrder(orderRepository),
-  };
+    // Use Cases
+    return {
+      gameRepository,
+      orderRepository,
+      settingsRepository,
+      getGames: new GetGames(gameRepository),
+      manageGames: new ManageGames(gameRepository),
+      placeOrder: new PlaceOrder(orderRepository),
+      trackOrder: new TrackOrder(orderRepository),
+    };
+  }, []);
 
   return (
     <DependencyContext.Provider value={dependencies}>

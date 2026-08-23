@@ -1,27 +1,27 @@
 import React, { useState } from 'react';
 import { ChevronDown, Shield, Clock, CreditCard, HelpCircle, MessageCircle, ArrowRight } from 'lucide-react';
 import Navbar from '../components/Navbar';
-import { contactDetails } from '../data/games';
+import { useStoreSettings } from '../context/StoreSettingsContext';
 
 const FAQItem = ({ question, answer }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <div className="glass-morphism overflow-hidden">
+        <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm transition-all duration-300">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full flex items-center justify-between p-4 md:p-6 text-left hover:bg-white/5 transition-all duration-300"
+                className="w-full flex items-center justify-between p-5 md:p-6 text-left hover:bg-slate-50 transition-colors"
             >
-                <span className="font-bold text-base md:text-lg pr-4 md:pr-8">{question}</span>
-                <div className={`p-2 rounded-xl bg-white/5 transition-transform duration-500 ${isOpen ? 'rotate-180 bg-accent text-black' : ''}`}>
-                    <ChevronDown size={window.innerWidth < 768 ? 16 : 20} />
+                <span className="font-bold text-slate-900 text-sm md:text-base pr-4">{question}</span>
+                <div className={`p-2 rounded-xl bg-slate-100 transition-transform duration-300 ${isOpen ? 'rotate-180 bg-accent text-white' : 'text-slate-500'}`}>
+                    <ChevronDown size={18} />
                 </div>
             </button>
             <div 
-                className={`grid transition-all duration-500 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+                className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
             >
                 <div className="overflow-hidden">
-                    <div className="px-4 md:px-6 pb-6 md:pb-8 text-white/50 leading-relaxed font-medium text-sm md:text-base">
+                    <div className="px-5 md:px-6 pb-6 text-slate-600 leading-relaxed font-medium text-xs md:text-sm border-t border-slate-100 pt-4 bg-slate-50/50">
                         {answer.split('\n').map((line, i) => (
                             <p key={i} className="mb-2">{line}</p>
                         ))}
@@ -33,6 +33,7 @@ const FAQItem = ({ question, answer }) => {
 };
 
 const FAQPage = () => {
+    const { contactDetails } = useStoreSettings();
     const faqs = [
         {
             question: "How does the top-up process work?",
@@ -43,124 +44,80 @@ const FAQPage = () => {
             answer: "Most orders are delivered within 5-15 minutes after payment verification. During peak hours, it may take up to 30 minutes. If you don't receive your top-up within 1 hour, please contact support."
         },
         {
-            question: "How do I find my Player ID?",
-            answer: "• Free Fire: Go to Profile in the game settings\n• PUBG Mobile: Go to Settings > Basic > Character\n• Mobile Legends: Go to Profile > Player ID\n• Clash of Clans: Go to Settings > More > Player Profile\n• Roblox: Your username is your Player ID"
+            question: "What payment methods are supported?",
+            answer: "We support all major Nepalese payment gateways including eSewa, Khalti, IME Pay, FonePay QR, and direct mobile banking transfers to Citizens Bank."
         },
         {
-            question: "What payment methods are available?",
-            answer: "We accept:\n• FonePay QR\n• Direct bank transfer (Nabil Bank)\n• Manual QR upload\n\nScan the QR code shown during checkout or transfer to the provided account number."
+            question: "Is it safe to top up through Dhangadi Store?",
+            answer: "Yes, 100% safe! We only require your public Player ID or Character ID. We never ask for your account passwords or login credentials."
         },
         {
             question: "What if I entered the wrong Player ID?",
-            answer: "If you've entered an incorrect Player ID, please contact our support team immediately via WhatsApp. We'll try to help, but we cannot guarantee changes once the order is processed."
+            answer: "If you entered an incorrect Player ID, please contact our support immediately on WhatsApp with your Order ID before the top-up is processed."
         },
         {
-            question: "Can I cancel my order?",
-            answer: "Orders can only be cancelled before they are marked as 'Processing'. Once processing begins, cancellation is not possible. Contact support for assistance."
-        },
-        {
-            question: "Is my payment information secure?",
-            answer: "Yes! All payments are processed directly through secure banking channels. We never store your banking credentials. Your privacy and security are our top priorities."
-        },
-        {
-            question: "How do I contact customer support?",
-            answer: "You can reach us via WhatsApp or Email. We're available 24/7 to assist you."
-        }
-    ];
-
-    const policies = [
-        {
-            icon: <Shield className="text-accent" size={28} />,
-            title: "Secure",
-            description: "Encrypted bank transfers"
-        },
-        {
-            icon: <Clock className="text-accent" size={28} />,
-            title: "Instant",
-            description: "5-15 mins typical delivery"
-        },
-        {
-            icon: <CreditCard className="text-accent" size={28} />,
-            title: "Verified",
-            description: "Manual verification team"
-        },
-        {
-            icon: <HelpCircle className="text-accent" size={28} />,
-            title: "Support",
-            description: "24/7 dedicated assistance"
+            question: "What is the refund policy?",
+            answer: "If we are unable to fulfill your order due to stock issues or technical errors, you will receive a 100% refund within 24 hours."
         }
     ];
 
     return (
-        <div className="min-h-screen bg-background text-foreground">
+        <div className="min-h-screen bg-background text-foreground flex flex-col">
             <Navbar />
-            <div className="max-w-7xl mx-auto pt-32 pb-20 px-4">
-                {/* Header */}
-                <div className="text-center mb-16 max-w-2xl mx-auto">
-                    <h1 className="text-4xl md:text-6xl font-black mb-6 tracking-tight">Support <span className="text-accent">&</span> Logic</h1>
-                    <p className="text-white/50 text-lg md:text-xl font-medium leading-relaxed">Everything you need to know about our premium gaming services in Digital Nepal.</p>
+
+            <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-8 pt-36 pb-20">
+                <div className="text-center max-w-2xl mx-auto mb-12">
+                    <span className="text-xs font-black uppercase tracking-widest text-accent mb-2 block">Help Center</span>
+                    <h1 className="text-3xl sm:text-5xl font-black uppercase text-slate-900 tracking-tight mb-4">
+                        Frequently Asked Questions
+                    </h1>
+                    <p className="text-slate-500 text-sm sm:text-base font-medium">
+                        Everything you need to know about purchasing gaming currency, payment proofs, and delivery timeframes.
+                    </p>
                 </div>
 
-                {/* Policies Grid */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-20">
-                    {policies.map((policy, index) => (
-                        <div key={index} className="glass-card flex flex-col items-center text-center p-6 md:p-8 group hover:-translate-y-2 transition-all duration-500">
-                            <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-white/5 flex items-center justify-center mb-4 md:mb-6 group-hover:bg-accent group-hover:text-black transition-all duration-500 border border-white/5">
-                                {policy.icon}
-                            </div>
-                            <h3 className="font-black text-base md:text-lg mb-2 uppercase tracking-tight">{policy.title}</h3>
-                            <p className="text-xs md:text-sm text-white/30 font-medium">{policy.description}</p>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                    {/* FAQs Column */}
-                    <div className="lg:col-span-2 space-y-4 md:space-y-6">
-                        <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-2xl md:text-3xl font-bold tracking-tight">Common Questions</h2>
-                            <div className="h-[2px] flex-1 mx-4 md:mx-8 bg-white/5 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-                        </div>
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+                    {/* FAQ List */}
+                    <div className="lg:col-span-8 space-y-4">
                         {faqs.map((faq, index) => (
                             <FAQItem key={index} question={faq.question} answer={faq.answer} />
                         ))}
                     </div>
 
-                    {/* Side Info Column */}
-                    <div className="lg:col-span-1 space-y-8">
-                        {/* WhatsApp CTA */}
-                        <div className="glass-card bg-accent/5 border-accent/20 relative overflow-hidden group p-6 md:p-8">
-                            <div className="absolute -right-12 -top-12 w-40 h-40 bg-accent/20 blur-3xl opacity-50 group-hover:opacity-100 transition-opacity" />
-                            <MessageCircle className="text-accent mb-6" size={48} />
-                            <h3 className="text-xl md:text-2xl font-black mb-2 uppercase tracking-tight">Need immediate help?</h3>
-                            <p className="text-sm md:text-base text-white/50 mb-8 font-medium">Our agents are active on WhatsApp and ready to assist you with your orders manually.</p>
+                    {/* Side Support Column */}
+                    <div className="lg:col-span-4 space-y-6">
+                        <div className="bg-blue-50/70 border border-blue-200 p-6 sm:p-8 rounded-[2rem] shadow-sm">
+                            <MessageCircle className="text-accent mb-4" size={36} />
+                            <h3 className="text-xl font-black uppercase text-slate-900 mb-2">Need direct help?</h3>
+                            <p className="text-xs text-slate-600 mb-6 font-medium leading-relaxed">
+                                Our agents are online on WhatsApp to verify orders, fix ID issues, and answer any questions.
+                            </p>
                             <a
-                                href={contactDetails.whatsappLink}
+                                href={contactDetails?.whatsappLink}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="w-full bg-accent text-black font-black py-4 rounded-2xl flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 transition-all text-sm md:text-base"
+                                className="w-full bg-accent hover:bg-accent-hover text-white font-bold py-3.5 px-6 rounded-2xl flex items-center justify-center gap-2 text-sm uppercase tracking-wider transition-all shadow-md shadow-accent/20"
                             >
-                                Chat on WhatsApp <ArrowRight size={20} />
+                                Chat on WhatsApp <ArrowRight size={16} />
                             </a>
                         </div>
 
-                        {/* Legal Block */}
-                        <div className="glass-card p-4 !bg-transparent opacity-60">
-                            <h4 className="font-black text-xs uppercase tracking-[0.2em] mb-6 text-white/30">Terms & Policies</h4>
-                            <div className="space-y-4">
-                                <div className="p-4 rounded-2xl border border-white/5 hover:border-white/20 transition-colors">
-                                    <h5 className="font-bold text-sm mb-2">Refund Policy</h5>
-                                    <p className="text-xs text-white/40 leading-relaxed">Full refund guaranteed if order isn't delivered within 60 minutes of verification.</p>
+                        <div className="bg-white border border-slate-200 p-6 rounded-[2rem] shadow-sm space-y-4">
+                            <h4 className="font-black text-xs uppercase tracking-widest text-slate-400">Guarantees</h4>
+                            <div className="space-y-3">
+                                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100">
+                                    <h5 className="font-bold text-xs text-slate-900 mb-1">Money-Back Guarantee</h5>
+                                    <p className="text-[11px] text-slate-500">Full refund if top-up fails or cannot be delivered.</p>
                                 </div>
-                                <div className="p-4 rounded-2xl border border-white/5 hover:border-white/20 transition-colors">
-                                    <h5 className="font-bold text-sm mb-2">Privacy Focus</h5>
-                                    <p className="text-xs text-white/40 leading-relaxed">We strictly process screenshot verification and never store player passwords.</p>
+                                <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100">
+                                    <h5 className="font-bold text-xs text-slate-900 mb-1">Password Free</h5>
+                                    <p className="text-[11px] text-slate-500">Direct ID transfers only. No account access needed.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </main>
         </div>
     );
 };

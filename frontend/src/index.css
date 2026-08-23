@@ -3,60 +3,66 @@
 @tailwind utilities;
 
 :root {
-  background-color: #0a0a0a;
-  color: #ffffff;
+  background-color: #F8FAFC;
+  color: #0F172A;
 }
 
 body {
   margin: 0;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
+  background-color: #F8FAFC;
+  color: #0F172A;
 }
 
-/* Custom Utilities */
+/* Light Theme Glass Utilities */
 .glass {
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04), 0 4px 6px -2px rgba(15, 23, 42, 0.02);
 }
 
 .glass-morphism {
-  @apply glass rounded-3xl overflow-hidden transition-all duration-500;
+  @apply glass rounded-3xl overflow-hidden transition-all duration-300;
 }
 
 .glass-card {
-  @apply glass p-6 sm:p-8 rounded-[2rem] border-white/5 hover:border-accent/40 hover:bg-white/[0.04] transition-all duration-700 shadow-2xl shadow-black/40;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+  @apply p-6 sm:p-8 rounded-[2rem] hover:border-accent/50 hover:shadow-xl hover:shadow-accent/10 transition-all duration-300;
 }
 
 /* Animations */
 @keyframes bounce-slow {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-8px); }
 }
 .animate-bounce-slow {
   animation: bounce-slow 4s ease-in-out infinite;
 }
 
 @keyframes pulse-soft {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.05); }
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.05); }
 }
 .animate-pulse-soft {
-  animation: pulse-soft 3s ease-in-out infinite;
+  animation: pulse-soft 4s ease-in-out infinite;
 }
 
-/* Scrollbar Styling */
+/* Scrollbar Styling for Light Theme */
 ::-webkit-scrollbar {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #F1F5F9;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: #CBD5E1;
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: #94A3B8;
 }

@@ -3,8 +3,8 @@ export class GetGames {
     this.gameRepository = gameRepository;
   }
 
-  async execute() {
-    return await this.gameRepository.getAll();
+  async execute(includeInactive = false) {
+    return await this.gameRepository.getAll(includeInactive);
   }
 
   async getById(id) {

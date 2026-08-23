@@ -7,15 +7,20 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: '#050505',
-        foreground: '#ffffff',
+        background: '#F8FAFC',
+        foreground: '#0F172A',
+        card: '#FFFFFF',
         accent: {
-          DEFAULT: '#C9A050', // Premium Gold
-          bright: '#F3E5AB',
-          cyan: '#00D1FF',
+          DEFAULT: '#2563EB', // Electric Royal Blue
+          hover: '#1D4ED8',
+          light: '#EFF6FF',
+          emerald: '#10B981',
+          purple: '#7C3AED',
+          amber: '#F59E0B',
         },
-        muted: '#121212',
-        surface: '#1A1A1A',
+        muted: '#F1F5F9',
+        border: '#E2E8F0',
+        surface: '#FFFFFF',
       },
       animation: {
         'marquee': 'marquee 25s linear infinite',
